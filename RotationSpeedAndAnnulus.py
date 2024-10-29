@@ -9,4 +9,12 @@ speed_of_sound_inlet = np.sqrt(
     gamma_air * gas_constant_air * inlet_stagnation_temperature
 )
 velocity_axial = inlet_mach_number * speed_of_sound_inlet
-print(velocity_axial)
+
+
+def AreaRatioFromMach(mach: float, gamma: float) -> float:
+    return (1 / mach) * ((2 / (gamma + 1)) * (1 + ((gamma - 1) * mach**2) / 2)) ** (
+        (gamma + 1) / (2 * (gamma - 1))
+    )
+
+
+print(AreaRatioFromMach(inlet_mach_number, gamma_air))
