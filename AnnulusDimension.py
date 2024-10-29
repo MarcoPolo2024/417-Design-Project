@@ -2,8 +2,7 @@ import numpy as np
 from DesignConstants import *
 from MachFromArea import Householder
 
-def AreaRatioFromMach(mach: float, gamma: float) -> float:
-    return (1 / mach) * ((2 / (gamma + 1)) * (1 + ((gamma - 1) * mach**2) / 2)) ** ((gamma + 1) / (2 * (gamma - 1)))
+AreaRatioFromMach = lambda mach,gamma: (1 / mach) * ((2 / (gamma + 1)) * (1 + ((gamma - 1) * mach**2) / 2)) ** ((gamma + 1) / (2 * (gamma - 1)))
 
 rotational_speed_revs = rotational_speed / 60
 rotational_speed_rads = 2 * np.pi * rotational_speed / 60
