@@ -1,8 +1,8 @@
 import numpy as np
 
-def HouseholdP2(x_intial:float,scheme_function:function,scheme_prime:function,scheme_double_prime:function)->float:
+def HouseholdP2(x_intial:float,scheme_function,scheme_prime,scheme_double_prime)->float:
   max_iterations = 1000
-  while abs(scheme_function(x_intial)) > 1e-8:
+  while abs(scheme_function(x_intial)) > 1e-12:
     x_intial = x_intial - ((2*scheme_function(x_intial))/(scheme_prime(x_intial) - (scheme_prime(x_intial)**2-scheme_function(x_intial)*scheme_double_prime(x_intial))**0.5))
     max_iterations -=1
     if max_iterations ==0:
@@ -10,7 +10,7 @@ def HouseholdP2(x_intial:float,scheme_function:function,scheme_prime:function,sc
       break
   return x_intial
 
-def Householder(x_position:float,section_supersonic:bool,area_function:function)->float:
+def Householder(x_position:float,section_supersonic:bool,area_function)->float:
   gamma = 1.148
   P = 2/(gamma+1)
   Q = 1-P
