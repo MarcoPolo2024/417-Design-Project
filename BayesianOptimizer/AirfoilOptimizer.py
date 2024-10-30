@@ -131,7 +131,7 @@ def ObjectiveFunction(input_vector):
             shell=input_file,
             stderr=subprocess.STDOUT,
             # timeout=30,
-            creationflags=subprocess.CREATE_NO_WINDOW,
+            # creationflags=subprocess.CREATE_NO_WINDOW,
         )
         # print("XFOIL output:", output)
     except subprocess.TimeoutExpired:
