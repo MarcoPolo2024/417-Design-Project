@@ -11,7 +11,7 @@ def HouseholdP2(x_intial:float,scheme_function,scheme_prime,scheme_double_prime)
   return x_intial
 
 def Householder(x_position:float,section_supersonic:bool,area_function)->float:
-  gamma = 1.148
+  gamma = 1.4
   P = 2/(gamma+1)
   Q = 1-P
   if section_supersonic==False:
