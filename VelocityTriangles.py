@@ -115,7 +115,7 @@ degree_of_reaction = 1 - (whirl_velocity_2 + whirl_velocity_1) / (2 * axial_velo
 
 # Formatting to solve all stages
 def DegOfReaction(normalized_length: float) -> float:
-    inital_value = 0.63
+    inital_value = 0.6
     final_value = 0.5
     k = 5
     exponential_model = final_value - (final_value - inital_value) * np.exp(
@@ -125,6 +125,21 @@ def DegOfReaction(normalized_length: float) -> float:
 
 
 velocity_triangles_table = {}
+velocity_triangles_table = {
+    r"$\lambda$": [],
+    r"$\Lambda$": [],
+    r"$ \beta_1 $": [],
+    r"$ \beta_2 $": [],
+    r"$ \alpha_1 $": [],
+    r"$ \alpha_2 $": [],
+    r"$C_{w1}$": [],
+    r"$C_{w2}$": [],
+    "de Haller": [],
+    r"$P_{0S}$": [],
+    r"$T_{0S}$": [],
+}
+P_i = inlet_stagnation_pressure
+T_i = inlet_stagnation_temperature
 for length in normalized_location_of_stages:
     U = RotationalVelocity(MeanRadius(length))
     b1 = (specific_heat * delta_temperature_stage) / (
@@ -139,14 +154,44 @@ for length in normalized_location_of_stages:
     whirl_velocity_vector = axial_velocity * np.tan(alpha_vector)
     deHaller = np.cos(alpha_vector[0]) / np.cos(alpha_vector[1])
     deHaller_criterion = deHaller >= 0.72
-    print(deHaller_criterion)
-    print(alpha_vector * 180 / np.pi)
-    print(beta_vector * 180 / np.pi)
-    print((beta_vector[0] - beta_vector[1]) * 180 / np.pi)
+    stage_pressure_ratio = (
+        1 + (polytropic_efficiency * delta_temperature_stage) / T_i
+    ) ** (1.4 / 0.4)
+    P_i = P_i * stage_pressure_ratio
+    T_i = T_i + delta_temperature_stage
+    degree_of_reaction = 1 - (whirl_velocity_vector[1] + whirl_velocity_vector[0]) / (
+        2 * axial_velocity
+    )
+    rad2deg = 180 / np.pi
+    velocity_triangles_table[r"$\lambda$"].append(round(WorkDone(length), 4))
+    velocity_triangles_table[r"$\Lambda$"].append(round(DegOfReaction(length), 4))
+    velocity_triangles_table[r"$ \beta_1 $"].append(round(b_vector[0] * rad2deg, 3))
+    velocity_triangles_table[r"$ \beta_2 $"].append(round(b_vector[1] * rad2deg, 3))
+    velocity_triangles_table[r"$ \alpha_1 $"].append(
+        round(alpha_vector[0] * rad2deg, 3)
+    )
+    velocity_triangles_table[r"$ \alpha_2 $"].append(
+        round(alpha_vector[1] * rad2deg, 3)
+    )
+    velocity_triangles_table[r"$C_{w1}$"].append(round(whirl_velocity_vector[0], 3))
+    velocity_triangles_table[r"$C_{w2}$"].append(round(whirl_velocity_vector[1], 3))
+    velocity_triangles_table["de Haller"].append(round(deHaller, 4))
+    velocity_triangles_table[r"$P_{0S}$"].append(round(P_i * 10**-5, 4))
+    velocity_triangles_table[r"$T_{0S}$"].append(round(T_i, 4))
+    # print(degree_of_reaction)
+    # print(P_i * 10**-5, T_i)
+    # print(deHaller_criterion)
+    # print(alpha_vector * 180 / np.pi)
+    # print(beta_vector * 180 / np.pi)
+    # print((beta_vector[0] - beta_vector[1]) * 180 / np.pi)
 
 if __name__ == "__main__":
+    import pandas as pd
+
     # PlotGeometry()
     # x = np.linspace(0, 1)
     # plt.plot(x, DegOfReaction(x))
     # plt.show()
-    rad2deg = 180 / np.pi
+    # print(velocity_triangles_table)
+    velocity_triangles_df = pd.DataFrame(velocity_triangles_table)
+    # velocity_triangles_df.to_markdown("README.md")  # , escape=False)
