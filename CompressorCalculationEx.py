@@ -392,7 +392,13 @@ Lambda_hub = 1 - (V_U_15_hub/(2*U_15_hub))
 #print(V_U_15_stage3)
 del_V_U_stage3 = V_U_15_stage3 - V_U_1_stage3
 
+<<<<<<< Updated upstream
 V_1_stage3 = sqrt((V_a**2)+(V_U_1_stage3))
+=======
+V_1_stage3 = sqrt((V_a**2)+(V_U_1_stage3)**2)
+print(V_1_stage3)
+print(V_a / cos(alpha_1_stage3*pi/180))
+>>>>>>> Stashed changes
 T_1_stage3 = T_01_stage3 - ((V_1_stage3**2)/(2*c_p))
 P_1_stage3 = (P_01_stage3*((T_1_stage3/T_01_stage3)**(gamma/(gamma -1))))
 rho_1_stage3 = ((1E5)*P_1_stage3)/(R*T_1_stage3)
