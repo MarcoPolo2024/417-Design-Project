@@ -219,10 +219,11 @@ P_01_stage3 = P_02_stage2
 P_02_stage3 = P_01_stage3*PR_stage3
 T_02_stage3 = T_01_stage3 + del_T0_stage3
 # From symmetry of velocity diagram
-alpha_1_stage3 = beta_1_stage3 # deg
-alpha_15_stage3 = beta_15_stage3 # deg
+alpha_1_stage3 = beta_15_stage3 # deg
+alpha_15_stage3 = beta_1_stage3 # deg
 V_U_1_stage3 = V_a*tan(alpha_1_stage3*pi/180)
 V_U_15_stage3 = V_a*tan(alpha_15_stage3*pi/180)
+
 
 # Stages 4, 5, and 6
 
@@ -236,8 +237,8 @@ b = np.array([[z1],[z2]])
 x = np.linalg.solve(A,b)
 beta_1_stage456 = atan(x[0][0]) * 180/pi # deg
 beta_15_stage456 = atan(x[1][0]) * 180/pi # deg
-alpha_1_stage456 = beta_1_stage3 # deg
-alpha_15_stage456 = beta_15_stage3 # deg
+alpha_1_stage456 = beta_15_stage3 # deg
+alpha_15_stage456 = beta_1_stage3 # deg
 
 T_01_stage = T_02_stage3
 P_01_stage = P_02_stage3
@@ -293,8 +294,8 @@ b = np.array([[z1],[z2]])
 x = np.linalg.solve(A,b)
 beta_1_stage7 = atan(x[0][0]) * 180/pi # deg
 beta_15_stage7 = atan(x[1][0]) * 180/pi # deg
-alpha_1_stage7 = beta_1_stage7 # deg
-alpha_15_stage7 = beta_15_stage7 # deg
+alpha_1_stage7 = beta_15_stage7 # deg
+alpha_15_stage7 = beta_1_stage7 # deg
 deHal_stage7 = cos(beta_1_stage7*pi/180) / cos(beta_15_stage7*pi/180)
 
 # All preliminary calculations have been carried out on the basis of constant mean diameter. Another problem aries whenever a sketch of the compressor is drawn.
@@ -349,7 +350,50 @@ r_15_hub = (r_hub + r_2_hub_stage1)/2
 U_15_hub = 2*pi*N*r_15_hub
 
 # From free vortex condition
+# V_U * r = const therefore 
 
-V_U_15_tip = V_U_1
-print(del_V_u)
+V_U_15_mean = del_V_u + V_U_1
+r_15_mean = (r_hub + r_tip) / 2
+V_U_15_tip = (V_U_15_mean*r_15_mean)/r_15_tip
+V_U_15_hub = (V_U_15_mean*r_15_mean)/r_15_hub
+
+# Stator inlet angle
+alpha_15_tip = atan(V_U_15_tip/V_a) * 180/pi # deg
+alpha_15_mean = atan(V_U_15_mean/V_a) * 180/pi # deg
+alpha_15_hub = atan(V_U_15_hub/V_a) * 180/pi # deg
+
+beta_15_tip = atan((U_15_tip-V_U_15_tip)/V_a) * 180/pi # deg
+beta_15_mean = atan((U_mean-V_U_15_mean)/V_a)*180/pi # deg
+beta_15_hub = atan((U_15_hub-V_U_15_hub)/V_a)*180/pi # deg
+
+Lambda_hub = 1 - (V_U_15_hub/(2*U_15_hub))
+
+# When calculating the annulus area at exit from the stage it was assumed that the density at the mean radius could be used in the continuity equation
+# Although the stagnation pressure and temperature are to be contant across the height of the blade, the static pressure and temperature and hence density will vary
+# This effect is small in compressor stages with their low pressure ratio but is more pronounced in turbine stages
+# The density variation from root to tip is about 4 percent for the first stage of the compressor and would be even less for later stages of higher hub-ip ratio
+
+# Velocity diagmrams drawn
+
+# The increase in fluid deflection and diffusion at the root section are readily visible from the vectors. V1 is a maximum at the root it is apparent that the maximum relative
+# Mach numbers occur at r_t for the rotor blade and at r_r for the stator blade
+
+# Turning attention to third stage it is useful to summarize conditions at the inlet and outlet before examining different distributions of whirl velocity. 
+# From mean radius design with Lambda =0.50
+
+#print(P_01_stage3)
+#print(PR_stage3)
+#print(P_02_stage3)
+#print(T_01_stage3)
+#print(T_02_stage3)
+#print(alpha_1_stage3)
+#print(beta_1_stage3)
+#print(V_U_1_stage3)
+#print(V_U_15_stage3)
+del_V_U_stage3 = V_U_15_stage3 - V_U_1_stage3
+
+V_1_stage3 = sqrt((V_a**2)+(V_U_1_stage3))
+T_1_stage3 = T_01_stage3 - ((V_1_stage3**2)/(2*c_p))
+P_1_stage3 = (P_01_stage3*((T_1_stage3/T_01_stage3)**(gamma/(gamma -1))))
+rho_1_stage3 = ((1E5)*P_1_stage3)/(R*T_1_stage3)
 
